@@ -1,8 +1,12 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const errorHandler = require("./controllers/errorController.js");
 const app = express();
 const productRouter = require("./routes/productRoutes.js");
+const userRouter = require("./routes/userRoutes.js");
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api", productRouter);
+app.use("/api", userRouter);
 app.use(errorHandler);
 module.exports = app;

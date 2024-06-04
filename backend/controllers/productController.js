@@ -4,6 +4,7 @@ const Product = require("../models/productModel.js");
 const apiFeatures = require("../utils/apiFeatures.js");
 
 exports.createProduct = catchAsync(async (req, res, next) => {
+  // req.body.user = req.user.id;
   const {
     name,
     description,
@@ -33,12 +34,17 @@ exports.createProduct = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
-  const apiFeature = new apiFeatures(Product.find({}), req.query).search();
+  const resultPerPage = 5;
+  const productCount = await Product.countDocuments();
+  const apiFeature = new apiFeatures(Product.find({}), req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
   const product = await apiFeature.query;
   if (!product) {
     return next(new AppError("No products found", 404));
   }
-  res.status(200).json({ message: "Success", product });
+  res.status(200).json({ message: "Success", product, productCount });
 });
 
 exports.getProductById = catchAsync(async (req, res, next) => {
