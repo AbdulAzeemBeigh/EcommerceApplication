@@ -14,4 +14,5 @@ router
   .get(Product.getProductById)
   .patch(isAuthenticatedUser, authorizeRoles("admin"), Product.updateProduct)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), Product.deleteProduct);
+router.route("/review").put(isAuthenticatedUser, Product.createProductReview);
 module.exports = router;
